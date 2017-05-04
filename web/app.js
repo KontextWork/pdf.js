@@ -49,11 +49,15 @@ import { ViewHistory } from './view_history';
 var DEFAULT_SCALE_DELTA = 1.1;
 var DISABLE_AUTO_FETCH_LOADING_BAR_TIMEOUT = 5000;
 
+
+
 function configure(PDFJS) {
-  PDFJS.imageResourcesPath = './images/';
+  // Final path in dw
+  PDFJS.imageResourcesPath = '../images/';
   if (typeof PDFJSDev !== 'undefined' &&
       PDFJSDev.test('FIREFOX || MOZCENTRAL || GENERIC || CHROME')) {
-    PDFJS.workerSrc = '../build/pdf.worker.js';
+      // Final path in dw
+      PDFJS.workerSrc = '../js/pdf.worker.js';
   }
   if (typeof PDFJSDev === 'undefined' || !PDFJSDev.test('PRODUCTION')) {
     PDFJS.cMapUrl = '../external/bcmaps/';
