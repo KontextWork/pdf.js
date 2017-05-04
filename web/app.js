@@ -453,9 +453,14 @@ var PDFViewerApplication = {
         support = false;
       }
     }
+
+    // The method that determines this property on PDFJS simply checks if the browser isIE and is not an iFrame. But for IE 11 fullscreen from an iFrame works.
+    // Hence comment out PDFJS.disableFullscreen check.
+    /*
     if (support && PDFJS.disableFullscreen === true) {
       support = false;
     }
+    */
 
     return shadow(this, 'supportsFullscreen', support);
   },
