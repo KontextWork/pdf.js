@@ -1467,7 +1467,19 @@ function webViewerInitialized() {
 
   if (typeof PDFJSDev === 'undefined' ||
       !PDFJSDev.test('FIREFOX || MOZCENTRAL')) {
-    mozL10n.setLanguage(PDFJS.locale);
+
+      function getHashValue(key) {
+        var matches = location.hash.match(new RegExp(key+'=([^&]*)'));
+        return matches ? matches[1] : null;
+      }
+      
+      var locale = PDFJS.locale;
+
+      if (getHashValue('locale') !== null){
+        locale = getHashValue('locale');
+      }
+
+      mozL10n.setLanguage(locale);
   } else {
     if (!PDFViewerApplication.supportsDocumentFonts) {
       PDFJS.disableFontFace = true;
