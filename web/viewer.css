@@ -1944,3 +1944,7 @@ html[dir='rtl'] #documentPropertiesOverlay .row > * {
     display: none;
   }
 }
+
+#toolbarViewer #scaleSelectContainer {
+  -webkit-margin-before: 7px;
+}
