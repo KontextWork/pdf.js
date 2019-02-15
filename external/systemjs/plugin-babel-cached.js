@@ -26,13 +26,14 @@ function getDb() {
       var request = indexedDB.open(dbName, dbVersion);
       request.onupgradeneeded = function() {
         var db = request.result;
-        db.createObjectStore(dbCacheTable, {keyPath: 'address'});
+        db.createObjectStore(dbCacheTable, { keyPath: 'address', });
       };
       request.onsuccess = function() {
         var db = request.result;
         resolve(db);
       };
       request.onerror = function () {
+        console.warn('getDb: ' + request.error);
         reject(request.error);
       };
     });
@@ -55,6 +56,9 @@ function storeCache(address, hashCode, translated, format) {
       tx.oncomplete = function () {
         resolve();
       };
+      tx.onerror = function () {
+        resolve();
+      };
     });
   });
 }
@@ -74,6 +78,9 @@ function loadCache(address, hashCode) {
           format: found.format,
         } : null);
       };
+      tx.onerror = function () {
+        resolve(null);
+      };
     });
   });
 }
@@ -89,7 +96,7 @@ function sha256(str) {
 }
 
 exports.translate = function (load, opt) {
-  var savedHashCode;
+  var savedHashCode, babelTranslateError;
   return sha256(load.source).then(function (hashCode) {
     savedHashCode = hashCode;
     return loadCache(load.address, hashCode);
@@ -103,6 +110,13 @@ exports.translate = function (load, opt) {
                         translated, load.metadata.format).then(function () {
         return translated;
       });
+    }, function(reason) {
+      throw (babelTranslateError = reason);
     });
+  }.bind(this)).catch(function(reason) {
+    if (babelTranslateError) {
+      throw babelTranslateError;
+    }
+    return babel.translate.call(this, load, opt);
   }.bind(this));
 };

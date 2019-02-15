@@ -19,82 +19,114 @@
 /**
  * @interface
  */
-function IPDFLinkService() {}
-IPDFLinkService.prototype = {
+class IPDFLinkService {
   /**
    * @returns {number}
    */
-  get page() {},
+  get pagesCount() {}
+
+  /**
+   * @returns {number}
+   */
+  get page() {}
+
   /**
    * @param {number} value
    */
-  set page(value) {},
+  set page(value) {}
+
+  /**
+   * @returns {number}
+   */
+  get rotation() {}
+
+  /**
+   * @param {number} value
+   */
+  set rotation(value) {}
+
   /**
    * @param dest - The PDF destination object.
    */
-  navigateTo(dest) {},
+  navigateTo(dest) {}
+
   /**
    * @param dest - The PDF destination object.
    * @returns {string} The hyperlink to the PDF object.
    */
-  getDestinationHash(dest) {},
+  getDestinationHash(dest) {}
+
   /**
    * @param hash - The PDF parameters/hash.
    * @returns {string} The hyperlink to the PDF object.
    */
-  getAnchorUrl(hash) {},
+  getAnchorUrl(hash) {}
+
   /**
    * @param {string} hash
    */
-  setHash(hash) {},
+  setHash(hash) {}
+
   /**
    * @param {string} action
    */
-  executeNamedAction(action) {},
+  executeNamedAction(action) {}
 
   /**
    * @param {number} pageNum - page number.
    * @param {Object} pageRef - reference to the page.
    */
-  cachePageRef(pageNum, pageRef) {},
-};
+  cachePageRef(pageNum, pageRef) {}
+}
 
 /**
  * @interface
  */
-function IPDFHistory() {}
-IPDFHistory.prototype = {
-  forward() {},
-  back() {},
-  push(params) {},
-  updateNextHashParam(hash) {},
-};
+class IPDFHistory {
+  /**
+   * @param {string} fingerprint - The PDF document's unique fingerprint.
+   * @param {boolean} resetHistory - (optional) Reset the browsing history.
+   */
+  initialize(fingerprint, resetHistory = false) {}
+
+  /**
+   * @param {Object} params
+   */
+  push({ namedDest, explicitDest, pageNumber, }) {}
+
+  pushCurrentPosition() {}
+
+  back() {}
+
+  forward() {}
+}
 
 /**
  * @interface
  */
-function IRenderableView() {}
-IRenderableView.prototype = {
+class IRenderableView {
   /**
    * @returns {string} - Unique ID for rendering queue.
    */
-  get renderingId() {},
+  get renderingId() {}
+
   /**
    * @returns {RenderingStates}
    */
-  get renderingState() {},
+  get renderingState() {}
+
   /**
    * @returns {Promise} Resolved on draw completion.
    */
-  draw() {},
-  resume() {},
-};
+  draw() {}
+
+  resume() {}
+}
 
 /**
  * @interface
  */
-function IPDFTextLayerFactory() {}
-IPDFTextLayerFactory.prototype = {
+class IPDFTextLayerFactory {
   /**
    * @param {HTMLDivElement} textLayerDiv
    * @param {number} pageIndex
@@ -104,7 +136,7 @@ IPDFTextLayerFactory.prototype = {
    */
   createTextLayerBuilder(textLayerDiv, pageIndex, viewport,
                          enhanceTextSelection = false) {}
-};
+}
 
 /**
  * @interface
@@ -113,9 +145,46 @@ class IPDFAnnotationLayerFactory {
   /**
    * @param {HTMLDivElement} pageDiv
    * @param {PDFPage} pdfPage
+   * @param {string} imageResourcesPath - (optional) Path for image resources,
+   *   mainly for annotation icons. Include trailing slash.
    * @param {boolean} renderInteractiveForms
+   * @param {IL10n} l10n
    * @returns {AnnotationLayerBuilder}
    */
-  createAnnotationLayerBuilder(pageDiv, pdfPage,
-                               renderInteractiveForms = false) {}
+  createAnnotationLayerBuilder(pageDiv, pdfPage, imageResourcesPath = '',
+                               renderInteractiveForms = false,
+                               l10n = undefined) {}
+}
+
+/**
+ * @interface
+ */
+class IL10n {
+  /**
+   * @returns {Promise<string>} - Resolves to the current locale.
+   */
+  async getLanguage() {}
+
+  /**
+   * @returns {Promise<string>} - Resolves to 'rtl' or 'ltr'.
+   */
+  async getDirection() {}
+
+  /**
+   * Translates text identified by the key and adds/formats data using the args
+   * property bag. If the key was not found, translation falls back to the
+   * fallback text.
+   * @param {string} key
+   * @param {object} args
+   * @param {string} fallback
+   * @returns {Promise<string>}
+   */
+  async get(key, args, fallback) { }
+
+  /**
+   * Translates HTML element.
+   * @param {HTMLElement} element
+   * @returns {Promise<void>}
+   */
+  async translate(element) { }
 }
