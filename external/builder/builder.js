@@ -53,7 +53,7 @@ function preprocess(inFilename, outFilename, defines) {
       throw new Error('No JavaScript expression given at ' + loc());
     }
     try {
-      return vm.runInNewContext(code, defines, {displayErrors: false});
+      return vm.runInNewContext(code, defines, { displayErrors: false, });
     } catch (e) {
       throw new Error('Could not evaluate "' + code + '" at ' + loc() + '\n' +
                       e.name + ': ' + e.message);
@@ -240,7 +240,7 @@ function preprocessCSS(mode, source, destination) {
                  !/\}\s*$/.test(lines[i]) &&
                  lines[i].indexOf(':') < 0);
         if (i < lines.length && /\S\s*}\s*$/.test(lines[i])) {
-          lines[i] = lines[i].substr(lines[i].indexOf('}'));
+          lines[i] = lines[i].substring(lines[i].indexOf('}'));
         }
       }
       // collapse whitespaces
