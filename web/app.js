@@ -332,9 +332,20 @@ const PDFViewerApplication = {
    * @private
    */
   async _initializeL10n() {
+    function getHashValue(key) {
+      let matches = location.hash.match(new RegExp(key+'=([^&]*)'));
+      return matches ? matches[1] : null;
+    };
+
+    let locale = AppOptions.get('locale');
+
+    if (getHashValue('locale') !== null){
+      locale = getHashValue('locale');
+    }
+
     this.l10n = this.externalServices.createL10n(
       typeof PDFJSDev === "undefined" || PDFJSDev.test("!PRODUCTION || GENERIC")
-        ? { locale: AppOptions.get("locale") }
+        ? { locale: locale }
         : null
     );
     const dir = await this.l10n.getDirection();
