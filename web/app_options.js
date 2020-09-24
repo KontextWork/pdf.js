@@ -98,7 +98,7 @@ const defaultOptions = {
   },
   imageResourcesPath: {
     /** @type {string} */
-    value: "./images/",
+    value: '../images/',
     kind: OptionKind.VIEWER,
   },
   /**
@@ -235,7 +235,7 @@ const defaultOptions = {
     value:
       typeof PDFJSDev === "undefined" || !PDFJSDev.test("PRODUCTION")
         ? "../src/worker_loader.js"
-        : "../build/pdf.worker.js",
+        : "../js/pdf.worker.js",
     kind: OptionKind.WORKER,
   },
 };
