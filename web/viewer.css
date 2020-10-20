@@ -696,7 +696,7 @@ html[dir='rtl'] .dropdownToolbarButton {
   position: absolute;
   display: inline-block;
   top: 4px;
-  content: url(images/toolbarButton-menuArrows.png);
+  content: url(../images/toolbarButton-menuArrows.png);
 }
 html[dir='ltr'] .dropdownToolbarButton::after {
   right: 8px;
